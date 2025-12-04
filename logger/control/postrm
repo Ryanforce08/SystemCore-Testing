@@ -1,5 +1,5 @@
 #!/bin/sh
-PACKAGE_NAME="hello-world-autostart"
+PACKAGE_NAME="CanBus-logger"
 
 systemctl daemon-reload
 systemctl reset-failed $PACKAGE_NAME.service 2>/dev/null || true

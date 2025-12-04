@@ -1,5 +1,5 @@
 #!/bin/sh
-PACKAGE_NAME="hello-world-autostart"
+PACKAGE_NAME="CanBus-logger"
 
 echo "Configuring service for $PACKAGE_NAME"
 

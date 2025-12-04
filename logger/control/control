@@ -1,9 +1,9 @@
-Package: hello-world-autostart
-Version: 1.0.0
+Package: Can logger
+Version: 1.0.2
 Description: Autostart systemcore package
 Section: development
 Priority: optional
-Maintainer: Limelight Vision
+Maintainer: Ryan Radtke
 Architecture: all
 Source: local
 X-Port: 9001

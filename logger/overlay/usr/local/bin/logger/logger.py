@@ -212,6 +212,9 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     with bus_lock:
                         global current_bus
                         current_bus = num
+                    # Clear the message tables when switching buses
+                    can_messages.clear()
+                    can_raw_log.clear()
                     bus_switch_event.set()
                     self.respond_json({"ok": True, "bus": f"can{num}"})
                 else:
@@ -246,15 +249,99 @@ def index_html():
 <head>
     <title>SocketCAN Viewer</title>
     <style>
-        body { font-family: sans-serif; background: #fafafa; margin: 0; padding: 20px; }
-        table { border-collapse: collapse; width: 100%; margin-top: 10px; }
-        th, td { border: 1px solid #ccc; padding: 6px 8px; font-size: 14px; }
-        th { background: #f0f0f0; }
-        #heartbeat { padding: 10px; margin-bottom: 10px; background: #eee; }
-        #controls { margin-bottom: 15px; }
-        button { padding: 6px 12px; margin-right: 5px; }
-        #busBtns { margin: 10px 0; }
-        .active-bus { background: #4CAF50; color: white; }
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #333333;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            color: #ffffff;
+            margin-top: 0;
+            border-bottom: 2px solid #2196F3;
+            padding-bottom: 10px;
+        }
+        table { 
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 10px;
+            background: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        th, td { 
+            border: 1px solid #444;
+            padding: 10px 12px;
+            font-size: 13px;
+            text-align: left;
+        }
+        th { 
+            background: #1a1a1a;
+            color: #2196F3;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        tr:hover {
+            background: #3a3a3a;
+        }
+        #heartbeat { 
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #2a2a2a;
+            border-radius: 8px;
+            border-left: 4px solid #2196F3;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        #controls { 
+            margin-bottom: 15px;
+        }
+        button { 
+            padding: 10px 18px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            background: #444;
+            color: #e0e0e0;
+            border: 1px solid #555;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        button:hover {
+            background: #555;
+            border-color: #666;
+        }
+        button:active {
+            transform: translateY(1px);
+        }
+        #busBtns { 
+            margin: 15px 0;
+            padding: 15px;
+            background: #2a2a2a;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        #busBtns strong {
+            color: #ffffff;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .active-bus { 
+            background: #2196F3;
+            color: white;
+            border-color: #2196F3;
+            font-weight: 600;
+        }
+        .active-bus:hover {
+            background: #42A5F5;
+            border-color: #42A5F5;
+        }
     </style>
 </head>
 <body>
