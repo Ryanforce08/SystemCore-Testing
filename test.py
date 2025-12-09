@@ -4,9 +4,11 @@ from queue import Queue
 
 import struct
 from typing import Dict
+import threading
+import time
 
 
-HOST = "192.168.1.184"
+HOST = "192.168.1.188"
 PORTS = range(1, 65536)
 
 # Your CPU can handle this
@@ -198,24 +200,24 @@ class RobotTelemetryParser:
 
 
 def main():
-    # print("Starting scan...\n")
+    print("Starting scan...\n")
 
-    # # Start workers
-    # for _ in range(THREAD_COUNT):
-    #     threading.Thread(target=tcp_worker, daemon=True).start()
-    #     threading.Thread(target=udp_worker, daemon=True).start()
+    # Start workers
+    for _ in range(THREAD_COUNT):
+        threading.Thread(target=tcp_worker, daemon=True).start()
+        threading.Thread(target=udp_worker, daemon=True).start()
 
-    # # Fill queues
-    # for port in PORTS:
-    #     tcp_queue.put(port)
-    #     udp_queue.put(port)
+    # Fill queues
+    for port in PORTS:
+        tcp_queue.put(port)
+        udp_queue.put(port)
 
-    # # Wait
-    # tcp_queue.join()
-    # udp_queue.join()
-    # print("\nFinished scanning all ports.")
-    parcer = RobotTelemetryParser()
-    print(parcer.parse(bytes.fromhex('05e90104220b9c00')))
+    # Wait
+    tcp_queue.join()
+    udp_queue.join()
+    print("\nFinished scanning all ports.")
+    # parcer = RobotTelemetryParser()
+    # print(parcer.parse(bytes.fromhex('05e90104220b9c00')))
 
 
 if __name__ == "__main__":
